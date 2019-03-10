@@ -2,9 +2,11 @@
 
 for file in $1/*
 do
-	lines=$(grep '<Overall>' $file)
-	num=$(echo "$lines" | wc -l)
-	avg=$(echo "$lines" | sed 's|<Overall>||' | awk -v num="$num" '{t+=$1}END{printf "%0.2f", t/num;}')
 	name=$(echo $file | sed 's|^.*/||; s|.dat||')
+
+	scores=$(grep '^<Overall>[0-5]' $file | sed 's|<Overall>||')
+	num=$(echo "$scores" | wc -l)
+	avg=$(echo "$scores" | awk -v num="$num" '{t+=$1}END{printf "%0.2f", t/num;}')
+
 	echo "$name $avg"
 done | sort -nrk2
