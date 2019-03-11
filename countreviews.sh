@@ -1,8 +1,4 @@
 #!/bin/bash
 
-for file in $1/*
-do
-	name=$(echo $file | sed 's|^.*/||; s|.dat||')
-	num=$(grep -c '^<Author>' $file)
-	echo "$name $num"
-done | sort -nrk2
+grep -Rc "^<Author>" $1/* | awk -v FS=":" '{gsub(/.*\//,"",$1); gsub(/.dat/,"",$1); print($1, $2);}' | sort -nrk2
+
